@@ -48,6 +48,12 @@
     "swig-templates": "^2.0.3"
   },
   "devDependencies": {
+    "@types/angular": "^1.7.2",
+    "@types/angularjs": "^1.5.14-alpha",
+    "@types/express": "^4.17.7",
+    "@types/mocha": "^8.0.3",
+    "@types/mongoose": "^5.7.36",
+    "@types/node": "^14.6.0",
     "grunt-concurrent": "^3.0.0",
     "grunt-contrib-csslint": "^2.0.0",
     "grunt-contrib-cssmin": "^3.0.0",
