@@ -4,11 +4,11 @@ module.exports = function(grunt) {
   // Unified Watch Object
   var watchFiles = {
     serverViews: ['app/views/**/*.*'],
-    serverJS: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js'],
+    serverJS: ['gruntfile.ts', 'server.ts', 'config/**/*.ts', 'app/**/*.ts'],
     clientViews: ['public/modules/**/views/**/*.html'],
     clientJS: ['public/js/*.js', 'public/modules/**/*.js'],
     clientCSS: ['public/modules/**/*.css'],
-    mochaTests: ['app/tests/**/*.js']
+    mochaTests: ['app/tests/**/*.ts']
   };
 
   // Project Configuration
@@ -84,7 +84,7 @@ module.exports = function(grunt) {
     },
     nodemon: {
       dev: {
-        script: 'server.js',
+        script: 'server.ts',
         options: {
           nodeArgs: ['--inspect'],
           ext: 'js,html',
@@ -122,12 +122,12 @@ module.exports = function(grunt) {
       src: watchFiles.mochaTests,
       options: {
         reporter: 'spec',
-        require: 'server.js'
+        require: 'server.ts'
       }
     },
     karma: {
       unit: {
-        configFile: 'karma.conf.js'
+        configFile: 'karma.conf.ts'
       }
     }
   });
