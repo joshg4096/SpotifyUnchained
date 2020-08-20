@@ -3,44 +3,38 @@
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+import { prop } from '@typegoose/typegoose';
 
-/**
- * Playlist Schema
- */
-var PlaylistSchema = new Schema({
-  title: {
-    type: String
-  },
-  published_date: {
-    type: Date,
-    default: Date.now
-  },
-  tracks: [{
-    created: {
-      type: Date,
-      default: Date.now
-    },
-    id: {
-      type: String
-    },
-    name: {
-      type: String
-    },
-    artist: {
-      type: String
-    },
-    open_url: {
-      type: String
-    },
-    uri: {
-      type: String
-    },
-    added_at: {
-      type: Date
-    }
-  }]
-});
+export class Track {
+  @prop({ default: Date.now })
+  public created?: Date;
 
-mongoose.model('Playlist', PlaylistSchema);
+  @prop()
+  public id?: String;
+
+  @prop()
+  public name?: String;
+
+  @prop()
+  public artist?: String;
+
+  @prop()
+  public open_url?: String;
+
+  @prop()
+  public uri?: String;
+
+  @prop()
+  public added_at?: Date;
+}
+
+export class Playlist {
+  @prop()
+  public title?: String;
+
+  @prop({ default: Date.now })
+  public published_date?: Date;
+
+  @prop({ type: Track })
+  public tracks?: Track[];
+}
