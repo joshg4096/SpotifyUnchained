@@ -5,7 +5,10 @@
 // Load up my private env
 require('./config/env/heroku')();
 
-let config = require('./config/config'),
+import { getModelForClass } from '@typegoose/typegoose';
+import { Track, Playlist } from './app/models/playlist.server.model'
+
+var config = require('./config/config'),
   mongoose = require('mongoose'),
   path = require('path'),
   chalk = require('chalk'),
@@ -25,7 +28,7 @@ mongoose.connect(config.db, { useNewUrlParser: true, useUnifiedTopology: true },
 });
 
 require(path.resolve('./app/models/playlist.server.model.js'));
-let Playlist = mongoose.model('Playlist');
+let PlaylistModel = getModelForClass(Playlist)
 
 let getPublishedDate = function (title) {
   let onlyDigits = title.replace(/([A-Z])\w+/g, '');
@@ -38,8 +41,8 @@ let getPublishedDate = function (title) {
   }
 };
 
-let create = function (title, tracks, done) {
-  let playlist = new Playlist(tracks);
+let create = function (title: string, tracks: Track[], done) {
+  let playlist = new PlaylistModel(tracks);
 
   playlist.title = title
   playlist.tracks = tracks;
@@ -49,7 +52,7 @@ let create = function (title, tracks, done) {
 
   delete upsertData._id;
 
-  Playlist.updateOne({
+  PlaylistModel.updateOne({
     title: playlist.title
   }, upsertData, {
     upsert: true
@@ -75,7 +78,7 @@ let spotifyApi = new SpotifyWebApi({
 
 let savePlaylist = function (data) {
 
-  let tracks = [];
+  let tracks: Track[] = [];
   data.tracks.items.forEach(function (item) {
     tracks.push({
       id: item.track.id,

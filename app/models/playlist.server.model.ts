@@ -10,19 +10,19 @@ export class Track {
   public created?: Date;
 
   @prop()
-  public id?: String;
+  public id?: string;
 
   @prop()
-  public name?: String;
+  public name?: string;
 
   @prop()
-  public artist?: String;
+  public artist?: string;
 
   @prop()
-  public open_url?: String;
+  public open_url?: string;
 
   @prop()
-  public uri?: String;
+  public uri?: string;
 
   @prop()
   public added_at?: Date;
@@ -30,7 +30,7 @@ export class Track {
 
 export class Playlist {
   @prop()
-  public title?: String;
+  public title?: string;
 
   @prop({ default: Date.now })
   public published_date?: Date;
