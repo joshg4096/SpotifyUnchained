@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
-import { Location } from '@angular/common';
+import { Location, isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class SpotifyService {
   private tokenName = 'spotify-token';
   private expirationName = 'spotify-token-expiration';
   private clientId = environment.spotifyClientId;
-  private redirectUri = window.location.origin;
+  private redirectUri: string;
   private scope = 'playlist-read-private playlist-modify-private';
 
   private authToken: string;
@@ -27,9 +27,17 @@ export class SpotifyService {
     BehaviorSubject<SpotifyApi.ListOfCurrentUsersPlaylistsResponse>
     = new BehaviorSubject(null);
 
-  constructor(private httpClient: HttpClient, private location: Location) { }
+  constructor(private httpClient: HttpClient, private location: Location, @Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(platformId)) {
+      this.redirectUri = window.location.origin;
+    }
+  }
 
   loadOrSaveToken(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     // Save token from hash if available
     const hash = window.location.hash;
     if (window.location.search.substring(1).indexOf('error') !== -1) {
@@ -51,7 +59,7 @@ export class SpotifyService {
       if (expiration && Number(expiration) > currentTime + 120000) {
         const remainingTime = Number(expiration) - currentTime - 100000;
         console.log(`Token expires in ${remainingTime} ms`);
-        this.timeout = setTimeout(() => this.logout(), remainingTime);
+        this.timeout = window.setTimeout(() => this.logout(), remainingTime);
         this.authToken = token;
         this.loggedIn = true;
         this.initializeUser();
